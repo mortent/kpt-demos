@@ -69,7 +69,7 @@ pe "kpt fn render wordpress"
 wait
 
 p "# show the diff from our changes"
-pe "git --no-pager diff"
+pe "git --no-pager diff --unified=0"
 wait
 
 p "# commit the package"
@@ -81,7 +81,7 @@ pe "kpt pkg update wordpress@v0.8"
 wait
 
 p "# show the changes merged in from upstream"
-pe "git --no-pager diff"
+pe "git --no-pager diff --unified=0"
 wait
 
 p "# commit the changes"
