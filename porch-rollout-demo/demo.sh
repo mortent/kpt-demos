@@ -50,7 +50,7 @@ wait
 
 p "# We have two clusters created with Config Connnector. They both have ACM installed"
 p "# Only cluster gke-one has the label deploy-packages=true"
-pe "k -n config-control get containerclusters.container.cnrm.cloud.google.com --show-labels"
+pe "kubectl -n config-control get containerclusters.container.cnrm.cloud.google.com --show-labels"
 wait
 
 p "# Create a rollout to deploy all packages in the default namespace to all cluster matching our label selector"
@@ -73,27 +73,27 @@ pe "cat rollout.yaml"
 wait
 
 p "# Apply the rollout CR"
-pe "k apply -f rollout.yaml"
+pe "kubectl apply -f rollout.yaml"
 wait
 
 pe "sleep 5"
 
 p "# We can see that a RootSyncSet for package-cluste combination has been created"
-pe "k get rootsyncsets -A"
+pe "kubectl get rootsyncsets -A"
 wait
 
 p "# We can also see that the package has been installed in the gke-one cluster"
-pe "k config use-context gke_mortent-dev-kube_us-central1_gke-one"
-pe "k -n config-management-system get rootsync foo-gke-one"
-pe "k get cm foo"
+pe "kubectl config use-context gke_mortent-dev-kube_us-central1_gke-one"
+pe "kubectl -n config-management-system get rootsync foo-gke-one"
+pe "kubectl get cm foo"
 wait
 
 p "# Switch back to our Config Controller cluster"
-pe "k config use-context gke_mortent-dev-kube_us-central1_krmapihost-config-controller-test"
+pe "kubectl config use-context gke_mortent-dev-kube_us-central1_krmapihost-config-controller-test"
 wait
 
 p "# We add the deploy-package=true label to the gke-two cluster"
-pe "k label containerclusters.container.cnrm.cloud.google.com gke-two deploy-packages=true"
+pe "kubectl -n config-control label containerclusters.container.cnrm.cloud.google.com gke-two deploy-packages=true"
 wait
 
 p "# We publish the bar package"
@@ -104,5 +104,5 @@ wait
 pe "sleep 30"
 
 p "# We can see that the needed RootSyncSets have been created (currently only using one cluster per RootSyncSet)"
-pe "k get rootsyncsets -A"
+pe "kubectl get rootsyncsets -A"
 wait
