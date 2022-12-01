@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/component: zookeeper
     role: zookeeper
 spec:
-  replicas: 1
+  replicas: 5
   podManagementPolicy: Parallel
   selector:
     matchLabels:
