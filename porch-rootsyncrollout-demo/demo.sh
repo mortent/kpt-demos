@@ -107,8 +107,8 @@ pe "kubectl -n config-control label containerclusters.container.cnrm.cloud.googl
 sleep 20
 
 p "# We create a new package 'bar' in the default namespace"
-kpt alpha rpkg init bar --repository=blueprint -n default --workspace=bar
-kpt alpha rpkg pull blueprint-27f109bd9e622b576bbf90394545a8036788694a -n default ./pull
+kpt alpha rpkg init bar --repository=blueprint -n default --workspace=bar > /dev/null 2>&1
+kpt alpha rpkg pull blueprint-27f109bd9e622b576bbf90394545a8036788694a -n default ./pull > /dev/null 2>&1
 cat <<EOF >>./pull/cm.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -118,16 +118,16 @@ metadata:
 data:
   cm: bar
 EOF
-kpt alpha rpkg push blueprint-27f109bd9e622b576bbf90394545a8036788694a -n default ./pull
-kpt alpha rpkg propose blueprint-27f109bd9e622b576bbf90394545a8036788694a -n default
-kpt alpha rpkg approve blueprint-27f109bd9e622b576bbf90394545a8036788694a -n default
+kpt alpha rpkg push blueprint-27f109bd9e622b576bbf90394545a8036788694a -n default ./pull > /dev/null 2>&1
+kpt alpha rpkg propose blueprint-27f109bd9e622b576bbf90394545a8036788694a -n default > /dev/null 2>&1
+kpt alpha rpkg approve blueprint-27f109bd9e622b576bbf90394545a8036788694a -n default > /dev/null 2>&1
 rm -fr ./pull
 pe "kpt alpha rpkg get"
 sleep 30
 
 p "# We then create a new revision of the 'bar' package and it will be progressively rolled out to all target clusters"
-kpt alpha rpkg edit blueprint-27f109bd9e622b576bbf90394545a8036788694a -n default --workspace bar2
-kpt alpha rpkg pull blueprint-35712e5fdbb93896693e2bf359d9ce1924413dc4 -n default ./pull
+kpt alpha rpkg edit blueprint-27f109bd9e622b576bbf90394545a8036788694a -n default --workspace bar2 > /dev/null 2>&1
+kpt alpha rpkg pull blueprint-35712e5fdbb93896693e2bf359d9ce1924413dc4 -n default ./pull > /dev/null 2>&1
 cat <<EOF >./pull/cm.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -137,9 +137,9 @@ metadata:
 data:
   cm: bar2
 EOF
-kpt alpha rpkg push blueprint-35712e5fdbb93896693e2bf359d9ce1924413dc4 -n default ./pull
-kpt alpha rpkg propose blueprint-35712e5fdbb93896693e2bf359d9ce1924413dc4 -n default
-kpt alpha rpkg approve blueprint-35712e5fdbb93896693e2bf359d9ce1924413dc4 -n default
+kpt alpha rpkg push blueprint-35712e5fdbb93896693e2bf359d9ce1924413dc4 -n default ./pull > /dev/null 2>&1
+kpt alpha rpkg propose blueprint-35712e5fdbb93896693e2bf359d9ce1924413dc4 -n default > /dev/null 2>&1
+kpt alpha rpkg approve blueprint-35712e5fdbb93896693e2bf359d9ce1924413dc4 -n default > /dev/null 2>&1
 rm -fr ./pull
 pe "kpt alpha rpkg get"
 sleep 30

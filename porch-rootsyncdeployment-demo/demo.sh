@@ -25,6 +25,39 @@ mkdir demo
 cd demo
 git init
 
+kpt alpha rpkg init foo --repository=blueprint -n default --workspace=foo
+kpt alpha rpkg pull blueprint-16f93511a8fd4774c928e09a7e135f9852161f74 -n default ./pull
+cat <<EOF >>./pull/cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: foo
+  namespace: default
+data:
+  cm: foo
+EOF
+kpt alpha rpkg push blueprint-16f93511a8fd4774c928e09a7e135f9852161f74 -n default ./pull
+kpt alpha rpkg propose blueprint-16f93511a8fd4774c928e09a7e135f9852161f74 -n default
+kpt alpha rpkg approve blueprint-16f93511a8fd4774c928e09a7e135f9852161f74 -n default
+rm -fr ./pull
+
+
+kpt alpha rpkg edit blueprint-16f93511a8fd4774c928e09a7e135f9852161f74 -n default --workspace foo2
+kpt alpha rpkg pull blueprint-93dabbfa9de63b507d13d366185a70ee2ed087f7 -n default ./pull
+cat <<EOF >./pull/cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: foo2
+  namespace: default
+data:
+  cm: foo2
+EOF
+kpt alpha rpkg push blueprint-93dabbfa9de63b507d13d366185a70ee2ed087f7 -n default ./pull
+kpt alpha rpkg propose blueprint-93dabbfa9de63b507d13d366185a70ee2ed087f7 -n default
+kpt alpha rpkg approve blueprint-93dabbfa9de63b507d13d366185a70ee2ed087f7 -n default
+rm -fr ./pull
+
 # hide the evidence
 clear
 
@@ -69,7 +102,7 @@ p "# We apply the RootSyncDeployment CR and see the PackageRevision being synced
 pe "kubectl apply -f rsd.yaml"
 sleep 20
 
-p "# We update the label on the second cluster and see that the PackageRevision is synced to that cluster too"
+p "# We update the label on the second cluster and see that the PackageRevision get synced to that cluster too"
 pe "kubectl -n config-control label containerclusters.container.cnrm.cloud.google.com gke-two foo=bar"
 sleep 20
 
